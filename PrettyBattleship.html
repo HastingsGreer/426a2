@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html> <head>
+<title>Pretty Super Battleship</title>
+<script
+src="http://www.cs.unc.edu/Courses/comp426-f16/jquery-3.1.0.js"></script>
+<script src="SBConstants.js"></script>
+<script src="SuperBattleship.js"></script>
+<script src="PrettyPlayer.js"></script>
+<script src="DumbAI.js"></script>
+<script src="PrettySuperBattleship.js"></script>
+<link rel="stylesheet" type="text/css" href="PrettySuperBattleship.css">
+</head>
+
+<body>
+
+<div id="map_panel">
+  <div id="map_view">
+    <div id="p1_view">P1 View</div>
+  </div>
+</div>
+
+<div id="cli_panel">
+  <div id="p1_cli_panel">
+    <div><h3>Player 1</h3></div>
+    <table id=controls>
+        <tr> <td></td> <td id=forward>Forward</td> <td></td> </tr>
+        <tr> <td id=left>Left</td> <td></td> <td id=right>Right</td></tr>
+        <tr> <td></td> <td id=backward>Backward</td> <td></td> </tr>
+    </table>
+    <div><input id="p1_cli_input"></div>
+    <div id="p1_cli_output"></div>
+  </div>
+</div>
+
+</body> </html>

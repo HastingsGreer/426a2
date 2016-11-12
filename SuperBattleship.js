@@ -1,12 +1,12 @@
 
 /* SuperBattleship
- * The game object. 
+ * The game object.
  *
  * custom_options parameter can be used to change game characteristics away from default
  * Beware that no validity check is done on values set by custom options.
  * Options that can be customized:
- *    boardSize : default is 50. Must be positive. Beware of making it too small, 
- *                otherwise player fleet's won't fit and/or board set up will 
+ *    boardSize : default is 50. Must be positive. Beware of making it too small,
+ *                otherwise player fleet's won't fit and/or board set up will
  *                get caught in inifinite loop.
  *    fleet : An array of objects that describe the ships in a fleet. Each object
  *            must provide a string field "name" for the name of the ship and an
@@ -17,8 +17,8 @@
  *    turnLimit : The number of turns before a draw is declared.
  *    rotateMissLimit : The number of misses a ship can rotate through.
  *    rearViewDistance : The number of squares behind that a ship can see.
- * 
- * 
+ *
+ *
  */
 
 var SuperBattleship = function (custom_options) {
@@ -33,9 +33,9 @@ var SuperBattleship = function (custom_options) {
 	}
 	return key;
     };
-    
+
     // Private fields
-    
+
     var options = {
 	fleet : [{name: "Carrier",
 		  size: 5},
@@ -59,21 +59,21 @@ var SuperBattleship = function (custom_options) {
 	    options[key] = custom_options[key];
 	}
     }
-    
+
     var status = SBConstants.REGISTERING_PLAYERS;
     var p1_key = null;
     var p2_key = null;
-    
+
     var game_key = makeKey(10);
 
     var registeredEventHandlers = {};
     var active_misses = [];
-    
+
     var player_one_fleet = [];
     var player_two_fleet = [];
 
     var turn_count = 0;
-    
+
     // Private methods
 
     // The following line captures the value of this (i.e.,
@@ -82,7 +82,7 @@ var SuperBattleship = function (custom_options) {
     // methods which may be called in a way where "this" is
     // not defined as the game object to have access to the
     // game object via the closure.
-    
+
     var that = this;
 
     var fireEvent = function (e) {
@@ -96,7 +96,7 @@ var SuperBattleship = function (custom_options) {
 	if (e.event_type == SBConstants.GAME_OVER_EVENT) {
 	    that.status = SBConstants.FINISHED;
 	}
-	
+
 	// A bit of a hack to add a game property
 	// to every event that is fired without having to
 	// remember to build it into the definition of each event type.
@@ -122,24 +122,24 @@ var SuperBattleship = function (custom_options) {
     var setupBoard = function () {
 	var max_ship_size = 0;
 	options.fleet.forEach(function (si) {if (si.size > max_ship_size) max_ship_size = si.size;});
-	
+
 	var half_max = Math.floor(max_ship_size/2.0+0.5);
 	var half_board = options.boardSize/2;
-	
+
 	var p1_init_area = {
 	    left: half_max,
 	    right: Math.floor(half_board - half_max),
 	    top: 0,
 	    bottom: options.boardSize-1
 	};
-	
+
 	var p2_init_area = {
 	    left: Math.ceil(half_board + half_max),
 	    right: options.boardSize-1-half_max,
 	    top: 0,
 	    bottom: options.boardSize-1
 	};
-	
+
 	var pickInitialPosition = function(area, key, fleet, size) {
 	    // WARNING: this algorithm may get stuck in an
 	    // infinite loop if the area is small relative to max ship size
@@ -148,14 +148,14 @@ var SuperBattleship = function (custom_options) {
 			      SBConstants.EAST, SBConstants.WEST];
 
 	    var is_valid = false;
-	    
+
 	    while(!is_valid) {
 		var x = Math.floor(Math.random()*(area.right-area.left+1))+area.left;
 		var y = Math.floor(Math.random()*(area.bottom-area.top+1))+area.top;
 		var dir = directions[Math.floor(Math.random()*4)];
 		var dx = SBConstants.dxByDir(dir);
 		var dy = SBConstants.dyByDir(dir);
-		
+
 		segment_check: {
 		    for (var seg=0; seg<size; seg++) {
 			var cx = x + dx*seg;
@@ -163,7 +163,7 @@ var SuperBattleship = function (custom_options) {
 
 			cx = normX(cx);
 			cy = normY(cy);
-			
+
 			if (cx < area.left || cx > area.right ||
 			    cy < area.top || cy > area.bottom ||
 			    findShipInFleetAtCoordinate(key, fleet, cx, cy) != null) {
@@ -173,18 +173,18 @@ var SuperBattleship = function (custom_options) {
 		    is_valid = true;
 		}
 	    }
-	    
+
 	    return {x: x, y: y, direction: dir}
 	};
 
 	options.fleet.forEach(function (si) {
 	    // Find a spot to place each ship in each
 	    // player's initial area.
-	    
+
 	    var pos = pickInitialPosition(p1_init_area,
 					  p1_key, player_one_fleet, si.size);
 	    player_one_fleet.push(new Ship(si.name, si.size, pos, p1_key, that));
-	    
+
 	    pos = pickInitialPosition(p2_init_area,
 				      p2_key, player_two_fleet, si.size);
 	    player_two_fleet.push(new Ship(si.name, si.size, pos, p2_key, that));
@@ -216,7 +216,7 @@ var SuperBattleship = function (custom_options) {
 	    status == SBConstants.FINISHED) {
 	    return;
 	}
-	
+
 	if (status == SBConstants.PLAYER_ONE) {
 	    status = SBConstants.PLAYER_TWO;
 	} else {
@@ -237,8 +237,8 @@ var SuperBattleship = function (custom_options) {
 	    }
 	});
 	active_misses = non_expiring_misses;
-	
-	fireEvent(new TurnChangeEvent(status));	
+
+	fireEvent(new TurnChangeEvent(status));
     };
 
     var normX = function(x) {return ((x%options.boardSize)+options.boardSize)%options.boardSize;};
@@ -271,10 +271,10 @@ var SuperBattleship = function (custom_options) {
 	if (ship.getStatus() == SBConstants.DEAD) {
 	    return false;
 	}
-	
+
 	// Is the square needed to move into empty?
 	// Also, calculate new position for head of ship
-	
+
 	var new_pos_x = pos.x;
 	var new_pos_y = pos.y;
 	var sqr_x = pos.x;
@@ -283,7 +283,7 @@ var SuperBattleship = function (custom_options) {
 	if (distance < 0) { // If moving backward, adjust for size of ship.
 	    size_adjust = ship.getSize() - 1;
 	}
-	
+
 	switch (pos.direction) {
 	case SBConstants.NORTH:
 	    sqr_y -= distance + size_adjust;
@@ -376,10 +376,10 @@ var SuperBattleship = function (custom_options) {
 	    tx = normX(tx);
 	    ty = normY(ty);
 	};
-	
+
 	var size = ship.getSize();
 	var miss_count = 0;
-	
+
 	for (var gy=0; gy<size; gy++) {
 	    for (var gx=1; gx<size; gx++) {
 		var tx = is_cw ? -gx : gx; // Check the other side if clockwise
@@ -409,7 +409,7 @@ var SuperBattleship = function (custom_options) {
 	switchTurns();
 	return true;
     };
-    
+
     // Public methods that require
     // access to private fields and methods
 
@@ -424,16 +424,16 @@ var SuperBattleship = function (custom_options) {
     this.getTurnCount = function() {return turn_count;};
     this.getTurnLimit = function() {return options.turnLimit;};
     this.getRearViewDistance = function() {return options.rearViewDistance;}
-    
+
     this.registerPlayerOne = function() {
 	if (p1_key != null) {
 	    return false; // Already have a player one registered
 	}
-	
+
 	p1_key = makeKey(10);
 	return p1_key;
     }
-    
+
     this.registerPlayerTwo = function() {
 	if (p2_key != null) {
 	    return false; //Already have a player two registered
@@ -442,21 +442,21 @@ var SuperBattleship = function (custom_options) {
 	p2_key = makeKey(10);
 	return p2_key;
     }
-    
+
     this.startGame = function() {
 	if (status != SBConstants.REGISTERING_PLAYERS ||
 	    p1_key == null ||
 	    p2_key == null) {
 	    return false;
 	}
-	
+
 	setupBoard();
-	
+
 	status = SBConstants.PLAYER_ONE;
 	fireEvent(new TurnChangeEvent(SBConstants.PLAYER_ONE));
 	return true;
     }
-    
+
     this.registerEventHandler = function(event_type, handler) {
 	if (registeredEventHandlers[event_type] == null) {
 	    registeredEventHandlers[event_type] = new Array();
@@ -480,7 +480,7 @@ var SuperBattleship = function (custom_options) {
 	}
 	return null;
     };
-	
+
     this.shootAt = function(player_key, x, y) {
 	if (status == SBConstants.REGISTERING_PLAYERS ||
 	    status == SBConstants.FINISHED) {
@@ -499,7 +499,7 @@ var SuperBattleship = function (custom_options) {
 
 	x = normX(x);
 	y = normY(y);
-	
+
 	// First see if we hit something. If so, generate a hit event
 	var ship_hit = findShipInFleetAtCoordinate(p1_key, player_one_fleet, x, y);
 	if (ship_hit == null) {
@@ -531,7 +531,7 @@ var SuperBattleship = function (custom_options) {
 		    }
 		}
 	    }
-	} else {	    
+	} else {
 	    // Otherwise, generate miss event.
 
 	    // First, see if we have an active miss event at that position
@@ -551,7 +551,7 @@ var SuperBattleship = function (custom_options) {
 
 	    fireEvent(new MissEvent(miss_info));
 	}
-	switchTurns();	
+	switchTurns();
 	return true;
     }
 
@@ -579,11 +579,11 @@ var SuperBattleship = function (custom_options) {
 	}
 	return null;
     }
-    
+
     this.queryLocation = function(key, x, y) {
 	var loc_info = null;
 	var always_visible = false;
-	
+
 	// First see if it is an active miss
 	var miss_info = null;
 	x = normX(x);
@@ -661,7 +661,7 @@ var GameOverEvent = function(winner) {
     this.winner = winner;
 }
 
-var Ship = function(name, size, position, key, game) {	       
+var Ship = function(name, size, position, key, game) {
     var segment_status = [];
     for (var i=0; i<size; i++) {
 	segment_status[i] = SBConstants.OK;
@@ -669,10 +669,10 @@ var Ship = function(name, size, position, key, game) {
 
     // Methods only availabe to the game object
     // and require the game key.
-    
+
     this.lookupSegmentIndex = function (gk, x,y) {
 	if (!game.isKey(gk)) {return;}
-	
+
 	x = game.normalizeX(x);
 	y = game.normalizeY(y);
 
@@ -714,7 +714,7 @@ var Ship = function(name, size, position, key, game) {
 	    position.direction = new_dir;
 	}
     }
-    
+
     this.registerHit = function(gk, x, y) {
 	if (!game.isKey(gk)) {return;}
 	var seg_idx = this.lookupSegmentIndex(gk, x,y);
@@ -736,10 +736,10 @@ var Ship = function(name, size, position, key, game) {
 	}
 	return null;
     }
-    
+
     this.occupies = function(k, x, y) {
 	if (key != k) return undefined;
-	
+
 	x = game.normalizeX(x);
 	y = game.normalizeY(y);
 
@@ -785,7 +785,7 @@ var Ship = function(name, size, position, key, game) {
 	var distance_behind = -1;
 	var distance_left = -1;
 	var distance_right = -1;
-	
+
 	if (y < 0) {
 	    distance_ahead = -y;
 	} else if (y > size-1) {
@@ -820,7 +820,7 @@ var Ship = function(name, size, position, key, game) {
     };
 
     // Generally public methods - does not require the player key associated with ship
-    
+
     this.getName = function() {return name;}
 
     this.getSize = function() {return size;}

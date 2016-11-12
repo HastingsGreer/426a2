@@ -1,0 +1,78 @@
+.miss {
+    background-color: black;
+    border: 1px solid black;
+}
+.p1 {
+    background-color: red;
+    border: 1px solid red;
+}
+.p1X {
+    background-color: #800000;
+    border: 1px solid #800000;
+}
+.p2 {
+    background-color: blue;
+    border: 1px solid blue;
+}
+.p2X {
+    background-color: #000080;
+    border: 1px solid blue;
+
+}
+.empty {
+    background-color: #8080FF;
+    border: 1px solid #8080FF;
+}
+.invisible {
+    background-color: grey;
+    border: 1px solid grey;
+}
+
+.selected {
+    border: 1px solid yellow;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-spacing: -1;
+}
+td {
+    width: 30px;
+    height: 10px
+}
+
+#map_panel {
+    width: 60%;
+    float: left;
+}
+
+#map_view {
+    height: 800px;
+    width: 800px;
+}
+
+#cli_panel {
+    background-color: #CCCCCC;
+    width: 40%;
+    height: 800px;
+    float: right;
+    position: relative;
+}
+
+#p1_cli_panel {
+    height: 800px;
+    position: relative;
+}
+
+#p1_cli_input {
+    width: 100%;
+}
+
+#p1_cli_output {
+    position: relative;
+    height: 80%;
+    overflow: auto;
+}
+body {
+    background-color: black;
+}
