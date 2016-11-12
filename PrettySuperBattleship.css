@@ -36,10 +36,20 @@ table, th, td {
     border: 1px solid black;
     border-spacing: -1;
 }
-td {
-    width: 30px;
-    height: 10px
+#map_view td {
+    width: 8px;
+    height: 8px;
+
 }
+#map_view td:hover {
+    border: 1px solid yellow;
+
+}
+#map_view table {
+    cursor: hand;
+}
+
+
 
 #map_panel {
     width: 60%;
