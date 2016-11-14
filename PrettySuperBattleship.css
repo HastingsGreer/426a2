@@ -34,7 +34,6 @@
 
 table, th, td {
     border: 1px solid black;
-    border-spacing: -1;
 }
 #map_view td {
     width: 8px;
@@ -85,4 +84,8 @@ table, th, td {
 }
 body {
     background-color: black;
+}
+
+.dirbutton {
+
 }

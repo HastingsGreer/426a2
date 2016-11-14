@@ -16,17 +16,14 @@ var PrettyPlayer = function(game, cli_input, cli_output, map, is_player_one) {
 
     	switch (e.event_type) {
     	case SBConstants.TURN_CHANGE_EVENT:
-    	    if (e.who == SBConstants.PLAYER_ONE) {
-    		cli_msg.text("Player one's turn (count = " + game.getTurnCount() + ")");
-    	    } else {
-    		cli_msg.text("Player two's turn (count = " + game.getTurnCount() + ")");
-    	    }
+    	    $("#turnCount span").empty();
+            $("#turnCount span").append(game.getTurnCount());
     	    break;
     	case SBConstants.MISS_EVENT:
-    	    cli_msg.text("Miss event at (" + e.x + ", " + e.y + ")");
+    	    //cli_msg.text("Miss event at (" + e.x + ", " + e.y + ")");
     	    break;
     	case SBConstants.HIT_EVENT:
-    	    cli_msg.text("Hit event at (" + e.x + ", " + e.y + ")");
+    	    //cli_msg.text("Hit event at (" + e.x + ", " + e.y + ")");
     	    break;
     	case SBConstants.SHIP_SUNK_EVENT:
     	    var ship = e.ship;

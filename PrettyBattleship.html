@@ -23,11 +23,13 @@ src="http://www.cs.unc.edu/Courses/comp426-f16/jquery-3.1.0.js"></script>
   <div id="p1_cli_panel">
     <div><h3>Player 1</h3></div>
     <table id=controls>
-        <tr> <td></td> <td id=forward>Forward</td> <td></td> </tr>
-        <tr> <td id=left>Left</td> <td></td> <td id=right>Right</td></tr>
-        <tr> <td></td> <td id=backward>Backward</td> <td></td> </tr>
+        <tr> <td></td> <td class=dirbutton id=forward>Forward</td> <td></td> </tr>
+        <tr> <td class=dirbutton id=left>Left</td> <td></td> <td class=dirbutton id=right>Right</td></tr>
+        <tr> <td></td> <td class=dirbutton id=backward>Backward</td> <td></td> </tr>
     </table>
-    <div><input id="p1_cli_input"></div>
+    <div id=turnCount>
+        Turn Number: <span> </span>
+    </div>
     <div id="p1_cli_output"></div>
   </div>
 </div>
